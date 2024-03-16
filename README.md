@@ -11,6 +11,9 @@ examply.py demonstrates an example of:
   4. applying random actions
   5. determining game state
   6. realizing game end value (including draws)
-  7. returning to homescreen
+  7. returning to home screen
 
-https://github.com/lunathanael/clash-royale-env/blob/master/out.mp4
+
+
+https://github.com/lunathanael/clash-royale-env/assets/68858103/c12eb88f-afdd-445f-b3ce-de7dd36d255b
+
