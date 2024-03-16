@@ -12,3 +12,4 @@ examply.py demonstrates an example of:
   5. determining game state
   6. realizing game end value (including draws)
   7. returning to homescreen
+https://github.com/lunathanael/clash-royale-env/blob/master/out.mp4
