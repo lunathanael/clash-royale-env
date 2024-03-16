@@ -170,7 +170,7 @@ class Interface:
         Returns:
             bool: True if the player is in a game, otherwise False.
         """
-        if (self.get_pixel_color(81, 702) == (8, 83, 157)) and (self.get_pixel_color(402, 700) == (8, 86, 161)):
+        if (self.get_pixel_color(81, 702) == (7, 73, 138)) and (self.get_pixel_color(402, 700) == (7, 76, 141)):
             return True
         return False
     
