@@ -162,6 +162,22 @@ class Interface:
             if self.get_pixel_color(coordinate[0], coordinate[1]) != target[idx]:
                 return False
         return True
+    
+    def find_pixel_mismatch(self, coordinates: List[Tuple[int]], target: List[Tuple[int]]) -> Tuple[int] | None:
+        """
+        Function to check a list of pixels against the target RGB values, performs absolute comparisons.
+
+        Args:
+            coordinates: (List[Tuple[int]]) List of coordinates in the form of (x, y) to examine.
+            target: (List[Tuple[int]]) List of target RGB values in the form of (R, G, B) to compare with.
+
+        Returns:
+            Tuple[int]: Returns the coordinate that failed the check, or None if none were found.
+        """
+        for idx, coordinate in enumerate(coordinates):
+            if self.get_pixel_color(coordinate[0], coordinate[1]) != target[idx]:
+                return coordinate
+        return None
 
     def determine_victor(self) -> float:
         """
