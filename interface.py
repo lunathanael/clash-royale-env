@@ -137,16 +137,6 @@ class Interface:
         else:
             subprocess.Popen(["./utilities/play_card.exe", str(xcoord), str(ycoord), str(cardx), str(cardy)])
 
-    def is_game_over(self) -> bool:
-        """
-        Determines whether the game has concluded, specifically, if the 'ok" button prompt is available.
-
-        Returns:
-            bool: True if the game is over, otherwise False.
-        """
-        #return (self.get_pixel_color(172, 643) == (82, 160, 224)) and (self.get_pixel_color(234, 641) == (91, 164, 224)) and (self.get_pixel_color(203, 643) == (224, 224, 224))
-        return self.determine_victor() != -1
-
     def check_pixels(self, coordinates: List[Tuple[int]], target: List[Tuple[int]]) -> bool:
         """
         Function to check a list of pixels against the target RGB values, performs absolute comparisons.
@@ -179,6 +169,14 @@ class Interface:
                 return coordinate
         return None
 
+    def is_terminal(self) -> bool:
+        """
+        Determines whether the game is terminal, specifically, if the card frame is still available.
+        Returns:
+            bool: True if the game is terminal, otherwise False.
+        """
+        return (self.get_pixel_color(98, 722) != (236, 28, 223)) and (self.get_pixel_color(403, 702) != (8, 85, 160)) and (self.get_pixel_color(404, 693) != (8, 88, 164))
+
     def determine_victor(self) -> float:
         """
         Determines the outcome of the game.
@@ -206,15 +204,30 @@ class Interface:
         Returns:
             bool: True if the player is in a game, otherwise False.
         """
-        if self.check_pixels([(42, 614), (35, 609), (46, 634)], [(0,0,0),(255, 255, 255), (0, 0, 0)]):
-            return True
-        return False
+        #return self.check_pixels([(42, 614), (35, 609), (45, 634)], [(0,0,0),(255, 255, 255), (0, 0, 0)])
+        return not self.is_terminal()
 
-    def accept_battle(self) -> None:
+    def pending_clan_battle(self) -> bool:
+        """
+        Checks if there is currently a pending clan battle challenge, must be on clan tab, only checks 1 pixel.
+
+        Returns:
+            bool: True if the player is in a game, otherwise False.
+        """
+        return self.check_pixels([(288, 538)], [(255, 190, 43)])
+
+    def accept_battle_friend(self) -> None:
         """
         Accepts a friendly challenge from the home menu.
         """
-        subprocess.run("./utilities/accept_battle.exe")
+        subprocess.run("./utilities/accept_battle_friend.exe")
+
+    def accept_battle_clan(self) -> None:
+        """
+        Accepts a clan challenge from clan tab.
+        Assumes clan tab is open and challenge is at the bottom
+        """
+        subprocess.run("./utilities/accept_battle_clan.exe")
 
     def exit_game(self) -> None:
         """
@@ -227,4 +240,20 @@ class Interface:
         Initiates a classic deck battle within the game interface with the top friend.
         """
 
-        subprocess.run("./utilities/start_classic_deck.exe")
+        subprocess.run("./utilities/start_classic_deck_friend.exe")
+
+    def start_classic_deck_battle_clan(self) -> None:
+        """
+        Initiates a classic deck battle within the game interface in the clan.
+        Assumes the clan tab is open
+        """
+
+        subprocess.run("./utilities/start_classic_deck_clan.exe")
+
+
+    def navigate_clan_tab(self) -> None:
+        """
+        Navigates to the clan tab from the home tab.
+        """
+
+        subprocess.run("./utilities/navigate_clan_tab.exe")
