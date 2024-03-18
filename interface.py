@@ -1,5 +1,5 @@
 import subprocess
-from typing import Tuple, Dict
+from typing import List, Tuple, Dict
 
 import numpy as np
 from numpy.typing import NDArray
@@ -146,6 +146,22 @@ class Interface:
         """
         #return (self.get_pixel_color(172, 643) == (82, 160, 224)) and (self.get_pixel_color(234, 641) == (91, 164, 224)) and (self.get_pixel_color(203, 643) == (224, 224, 224))
         return self.determine_victor() != -1
+    
+    def check_pixels(self, coordinates: List[Tuple[int]], target: List[Tuple[int]]) -> bool:
+        """
+        Function to check a list of pixels against the target RGB values, performs absolute comparisons.
+
+        Args:
+            coordinates: (List[Tuple[int]]) List of coordinates in the form of (x, y) to examine.
+            target: (List[Tuple[int]]) List of target RGB values in the form of (R, G, B) to compare with.
+
+        Returns:
+            bool: If all coordinates match the target.
+        """
+        for idx, coordinate in enumerate(coordinates):
+            if self.get_pixel_color(coordinate[0], coordinate[1]) != target[idx]:
+                return False
+        return True
 
     def determine_victor(self) -> float:
         """
@@ -155,12 +171,11 @@ class Interface:
             float: A numerical representation of the game outcome (0 for opponent win, 0.5 for draw, 1 for player win).
             Error states will return -1.
         """
-
-        if (self.get_pixel_color(163, 49) == (224, 224, 224)) and (self.get_pixel_color(193, 51) == (224, 224, 224)) and (self.get_pixel_color(248, 58) == (224, 224, 224)):
+        if self.check_pixels([(163, 49), (193,51), (248, 58)], [(255, 255, 255), (255, 255, 255), (255, 255, 255)]):
             return 0.5
-        if (self.get_pixel_color(156, 75) == (224, 179, 224)) and (self.get_pixel_color(213, 86) == (224, 179, 224)) and (self.get_pixel_color(237, 82) == (224, 179, 224)):
+        if self.check_pixels([(156, 75), (213, 86), (238, 83)], [(255, 204, 255), (255, 204, 255), (255, 204, 255)]):
             return 0
-        if (self.get_pixel_color(161, 302) == (90, 224, 224)) and (self.get_pixel_color(207, 294) == (90, 224, 224)) and (self.get_pixel_color(246, 301) == (90, 224, 224)):
+        if self.check_pixels([(161, 302), (207, 294), (246, 301)], [(90, 224, 224), (90, 224, 224), (90, 224, 224)]):
             return 1
         
         #raise RuntimeWarning("No Gameover event detected! Make sure this is intended behavior, otherwise, report this as a bug. Returning -1.")
