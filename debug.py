@@ -27,6 +27,6 @@ def rgb_arrays_to_mp4(rgb_arrays, output_path, fps: int = 30):
 
 interface = Interface() # Start the game interface
 print("Interface Initialized.")
-print(interface.is_terminal())
-for x in [(98, 722), (403, 702), (404, 693)]:
+print(interface.on_clan_tab())
+for x in [(30, 49), (151, 632), (373, 43)]:
     print(interface.get_pixel_color(x[0], x[1]), end=', ')

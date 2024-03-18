@@ -5,7 +5,8 @@ import pickle
 import numpy as np
 
 
-BUFFER_SIZE = 0
+BUFFER_SIZE = 100
+HOST = True
 
 class Buffer():
     def __init__(self):
@@ -25,7 +26,7 @@ buffer = Buffer()
 
 
 
-env = ClassicEnv(host=True)
+env = ClassicEnv(host=HOST)
 key = jax.random.PRNGKey(0)
 num_actions = env.num_actions()
 
@@ -47,5 +48,7 @@ for i in range(BUFFER_SIZE):
     buffer.add_game(rgb_frames, actions, result)
 
 timestr = time.strftime("%m%d-%H%M")
+if HOST:
+    timestr += '_H'
 with open(f'buffers/game_buffer_uniform_{timestr}.pkl', 'wb') as file_handle:
 	pickle.dump(buffer, file_handle)

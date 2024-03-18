@@ -15,6 +15,8 @@ class ClassicEnv():
             self._interface.play_card(x, y, card)
 
     def reset(self):
+        while not self._interface.on_clan_tab():
+            continue
         if self._is_host:
             self._interface.start_classic_deck_battle_clan()
         else:

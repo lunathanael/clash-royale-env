@@ -177,6 +177,15 @@ class Interface:
         """
         return (self.get_pixel_color(98, 722) != (236, 28, 223)) and (self.get_pixel_color(403, 702) != (8, 85, 160)) and (self.get_pixel_color(404, 693) != (8, 88, 164))
 
+    def on_clan_tab(self) -> bool:
+        """
+        Determines if the interface is on the clan tab, specifically by looking for the red exit box.
+        Returns:
+            bool: True if on clan tab, otherwise False.
+        """
+        return self.check_pixels([(30, 49), (151, 632), (373, 43)], [(51, 140, 69), (161, 155, 166), (255, 255, 255)])
+
+
     def determine_victor(self) -> float:
         """
         Determines the outcome of the game.
