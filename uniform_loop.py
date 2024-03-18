@@ -10,12 +10,12 @@ from absl import flags
 
 FLAGS = flags.FLAGS
 flags.DEFINE_integer("seed", 42, "Random seed.")
-flags.DEFINE_integer("num_simulations", 32, "Number of simulations.")
+flags.DEFINE_integer("num_simulations", 16, "Number of simulations.")
 flags.DEFINE_integer("buffer_size", 10, "Size of the buffer.")
 flags.DEFINE_integer("max_num_considered_actions", 16,
                      "The maximum number of actions expanded at the root.")
 flags.DEFINE_integer("max_depth", None, "The maximum search depth.")
-flags.DEFINE_bool("host", True, "If the user is the host.")
+flags.DEFINE_bool("host", None, "If the user is the host.")
 
 
 
@@ -72,6 +72,7 @@ def main(_):
     timestr = time.strftime("%m%d-%H%M")
     if FLAGS.host:
         timestr += '_H'
+
     with open(f'buffers/game_buffer_uniform_{timestr}.pkl', 'wb') as file_handle:
         pickle.dump(buffer, file_handle)
 
