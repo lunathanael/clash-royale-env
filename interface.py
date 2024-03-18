@@ -191,7 +191,7 @@ class Interface:
             return 0.5
         if self.check_pixels([(156, 75), (213, 86), (238, 83)], [(255, 204, 255), (255, 204, 255), (255, 204, 255)]):
             return 0
-        if self.check_pixels([(161, 302), (207, 294), (246, 301)], [(90, 224, 224), (90, 224, 224), (90, 224, 224)]):
+        if self.check_pixels([(161, 302), (207, 294), (246, 301)], [(102, 255, 255), (102, 255, 255), (102, 255, 255)]):
             return 1
         
         #raise RuntimeWarning("No Gameover event detected! Make sure this is intended behavior, otherwise, report this as a bug. Returning -1.")
