@@ -118,7 +118,7 @@ class Interface:
         b: int = (pixel_color >> 16) & 0xff
         return (r, g, b)
 
-    def play_card(self, x: int, y: int, card_index: int) -> None:
+    def play_card(self, x: int, y: int, card_index: int, block: bool=True) -> None:
         """
         Simulates playing a card action within the game interface.
 
@@ -126,12 +126,16 @@ class Interface:
             x (int): The x-coordinate where to play the card.
             y (int): The y-coordinate where to play the card.
             card_index (int): The index of the card to be played.
+            block (bool): True value will block the function from completing until the action is made.
         """
         dx, dy = x, 31 - y
         xcoord = 38 + dx * 20
         ycoord = 65 + dy * 16
         cardx, cardy = 130 + 77 * card_index, 650
-        subprocess.run(["./utilities/play_card.exe", str(xcoord), str(ycoord), str(cardx), str(cardy)])
+        if block:
+            subprocess.run(["./utilities/play_card.exe", str(xcoord), str(ycoord), str(cardx), str(cardy)])
+        else:
+            subprocess.Popen(["./utilities/play_card.exe", str(xcoord), str(ycoord), str(cardx), str(cardy)])
 
     def is_game_over(self) -> bool:
         """
@@ -164,13 +168,13 @@ class Interface:
 
     def in_game(self) -> bool:
         """
-        Checks if the player is currently in a game by looking for the bottom blue card area.
-        Careful, a False value doesn't guarantee the user is at a specific state, only that no actions can be played.
+        Checks if the player is currently in a game by checking for two pixels in chat box.
+        A False value doesn't guarantee the user is at a specific state, only that no actions can be played.
 
         Returns:
             bool: True if the player is in a game, otherwise False.
         """
-        if (self.get_pixel_color(81, 702) == (7, 73, 138)) and (self.get_pixel_color(402, 700) == (7, 76, 141)):
+        if (self.get_pixel_color(42, 614) == (0, 0, 0)) and (self.get_pixel_color(35, 609) == (255, 255, 255)) and (self.get_pixel_color(46, 634) == (0, 0, 0)):
             return True
         return False
     
