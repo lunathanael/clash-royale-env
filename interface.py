@@ -222,9 +222,9 @@ class Interface:
         """
         subprocess.run("./utilities/exit_game.exe")
 
-    def start_classic_deck_battle(self) -> None:
+    def start_classic_deck_battle_friend(self) -> None:
         """
-        Initiates a classic deck battle within the game interface.
+        Initiates a classic deck battle within the game interface with the top friend.
         """
 
         subprocess.run("./utilities/start_classic_deck.exe")

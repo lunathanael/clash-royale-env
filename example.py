@@ -2,7 +2,7 @@ from interface import Interface
 from random import randint # for random action delay
 
 def random_action():
-    x = randint(0, 18)
+    x = randint(0, 17)
     y = randint(0, 31)
     card = randint(0, 3)
     return x, y, card
@@ -29,7 +29,7 @@ interface = Interface() # Start the game interface
 print("Interface Initialized.")
 
 for i in range(100):
-    interface.start_classic_deck_battle() # Initiate game
+    interface.start_classic_deck_battle_friend() # Initiate game
     print("Game Requested.")
 
     while not interface.in_game(): # Wait for game to be in play-ready state
@@ -50,5 +50,5 @@ for i in range(100):
     interface.exit_game() # Exit the game-over screen
     print(f"Game had a total of {len(imgs)} frames rendered.")
 
-    rgb_arrays_to_mp4(imgs, f"./replays/game_{i}.mp4")
-    print(f"Game video stored at replays/game_{i}.mp4")
+    #rgb_arrays_to_mp4(imgs, f"./replays/game_{i}.mp4")
+    #print(f"Game video stored at replays/game_{i}.mp4")
