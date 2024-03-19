@@ -12,7 +12,7 @@ class ClassicEnv():
             self._interface.navigate_clan_tab()
 
     def apply(self, action):
-        if 0 <= action < 2304:
+        if self._interface.in_game() and  0 <= action < 2304:
             x = (action // (4 * 32))
             y = (action // 4) % 32
             card = action % 4
