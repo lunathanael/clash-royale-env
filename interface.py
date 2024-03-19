@@ -109,7 +109,7 @@ class Interface:
         Returns:
             Tuple[int, int, int]: A tuple (r, g, b) representing the color of the pixel.
         """
-        
+
         hdc = win32gui.GetDC(None)
         pixel_color: int = win32gui.GetPixel(hdc, self.xpos + x, self.ypos + y)
         win32gui.ReleaseDC(None, hdc)
@@ -146,7 +146,7 @@ class Interface:
         """
         #return (self.get_pixel_color(172, 643) == (82, 160, 224)) and (self.get_pixel_color(234, 641) == (91, 164, 224)) and (self.get_pixel_color(203, 643) == (224, 224, 224))
         return self.determine_victor() != -1
-    
+
     def check_pixels(self, coordinates: List[Tuple[int]], target: List[Tuple[int]]) -> bool:
         """
         Function to check a list of pixels against the target RGB values, performs absolute comparisons.
@@ -162,7 +162,7 @@ class Interface:
             if self.get_pixel_color(coordinate[0], coordinate[1]) != target[idx]:
                 return False
         return True
-    
+
     def find_pixel_mismatch(self, coordinates: List[Tuple[int]], target: List[Tuple[int]]) -> Tuple[int] | None:
         """
         Function to check a list of pixels against the target RGB values, performs absolute comparisons.
@@ -193,7 +193,7 @@ class Interface:
             return 0
         if self.check_pixels([(161, 302), (207, 294), (246, 301)], [(102, 255, 255), (102, 255, 255), (102, 255, 255)]):
             return 1
-        
+
         #raise RuntimeWarning("No Gameover event detected! Make sure this is intended behavior, otherwise, report this as a bug. Returning -1.")
         return -1
 
@@ -201,14 +201,15 @@ class Interface:
         """
         Checks if the player is currently in a game by checking for two pixels in chat box.
         A False value doesn't guarantee the user is at a specific state, only that no actions can be played.
+        Note: Seemingly after 8PM EST, the color scheme changes for the game.
 
         Returns:
             bool: True if the player is in a game, otherwise False.
         """
-        if (self.get_pixel_color(42, 614) == (0, 0, 0)) and (self.get_pixel_color(35, 609) == (255, 255, 255)) and (self.get_pixel_color(46, 634) == (0, 0, 0)):
+        if self.check_pixels([(42, 614), (35, 609), (46, 634)], [(0,0,0),(255, 255, 255), (0, 0, 0)]):
             return True
         return False
-    
+
     def accept_battle(self) -> None:
         """
         Accepts a friendly challenge from the home menu.
