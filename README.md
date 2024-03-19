@@ -14,9 +14,9 @@ python -m pip install -r requirements.txt
 ```
 
 ## Setup
-1. Download the latest google play games from https://play.google.com/googleplaygames.
+1. Download the latest google play games from [here](https://play.google.com/googleplaygames).
 2. Download and run Clash Royale from the google play games application.
-3. If relevant, set your system time to be within 9am - 7pm.
+3. If relevant, set your system time to be within 9 AM - 7 PM.
 
 ## Quick Start
 Run a self-play worker as such
