@@ -28,5 +28,9 @@ def rgb_arrays_to_mp4(rgb_arrays, output_path, fps: int = 30):
 interface = Interface() # Start the game interface
 print("Interface Initialized.")
 print(interface.on_clan_tab())
-for x in [(30, 49), (151, 632), (373, 43)]:
+ls = [(30, 49), (151, 632), (373, 43)]
+for x in ls:
     print(interface.get_pixel_color(x[0], x[1]), end=', ')
+
+from network import uniform_policy
+print(uniform_policy(1))

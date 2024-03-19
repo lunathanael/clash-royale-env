@@ -2,7 +2,7 @@ import jax.numpy as jnp
 from mctx import RecurrentFnOutput, RootFnOutput
 
 def uniform_policy(batch_size):
-    return jnp.full([batch_size, 2305,], 1/2305, dtype=jnp.float32)
+    return jnp.full([batch_size, 2305,], (1/2305), dtype=jnp.float32)
 
 def uniform_recurrentfn(params, rng_key, action, embedding):
     del params, rng_key, action

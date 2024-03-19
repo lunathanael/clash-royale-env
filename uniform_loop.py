@@ -48,7 +48,6 @@ def main(_):
             obs = env.get_observation()
             root = uniform_rootfn(obs)
             rng_key, gmp_key = jax.random.split(rng_key)
-            print("search")
             policy_output = gumbel_muzero_policy(
                 params=(),
                 rng_key=gmp_key,
@@ -59,6 +58,9 @@ def main(_):
                 max_num_considered_actions=FLAGS.max_num_considered_actions,
             )
             selected_action = policy_output.action[0]
+            rng_key, act_key = jax.random.split(rng_key)
+            if jax.random.uniform(act_key) < 0.2:
+                selected_action = 2304
             env.apply(selected_action)
             actions.append(selected_action)
             rgb_frames.append(obs)

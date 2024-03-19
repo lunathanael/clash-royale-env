@@ -1,4 +1,5 @@
 from interface import Interface
+import time
 
 class ClassicEnv():
     def __init__(self, host: bool):
@@ -6,6 +7,9 @@ class ClassicEnv():
         self._is_host = host
         self._interface = Interface()
         self._interface.navigate_clan_tab()
+        time.sleep(1)
+        if not self._interface.on_clan_tab():
+            self._interface.navigate_clan_tab()
 
     def apply(self, action):
         if 0 <= action < 2304:
