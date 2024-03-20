@@ -183,7 +183,7 @@ class Interface:
         Returns:
             bool: True if on clan tab, otherwise False.
         """
-        return self.check_pixels([(177, 30), (251, 29)], [(255, 255, 255), (255, 255, 255)])
+        return self.check_pixels([(4, 293), (2, 103)], [(56, 82, 125), (56, 82, 125)])
 
 
     def determine_victor(self) -> float:
