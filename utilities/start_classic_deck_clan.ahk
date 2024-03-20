@@ -5,11 +5,11 @@ Click
 
 sleep 400
 
-SendEvent "{Click 235 400 Down}{click 235 112 Up}"
+SendEvent "{Click 226 420 Down}{click 229 109 Up}"
 
 sleep 50
 
-MouseMove 194, 279
+MouseMove 229, 263
 Click
 
 

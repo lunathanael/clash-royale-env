@@ -183,7 +183,7 @@ class Interface:
         Returns:
             bool: True if on clan tab, otherwise False.
         """
-        return self.check_pixels([(90, 400), (240, 27)], [(183, 98, 254), (255, 255, 255)])
+        return self.check_pixels([(177, 30), (251, 29)], [(210, 124, 249), (229, 45, 49)])
 
 
     def determine_victor(self) -> float:
@@ -222,7 +222,7 @@ class Interface:
         Returns:
             bool: True if the player is in a game, otherwise False.
         """
-        return self.check_pixels([(183, 336)], [(255, 202, 81)])
+        return self.check_pixels([(188, 335)], [(56, 82, 125)])
 
     def accept_battle_friend(self) -> None:
         """

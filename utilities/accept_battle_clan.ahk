@@ -1,5 +1,5 @@
 ; accept battle
 
-MouseMove 216, 366
+MouseMove 221, 263
 Click
 
