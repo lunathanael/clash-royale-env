@@ -1,6 +1,6 @@
 ; classic deck friendly battle in clan
 
-MouseMove 112, 398
+MouseMove 112, 421
 Click
 
 sleep 400
