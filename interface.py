@@ -213,7 +213,7 @@ class Interface:
         Returns:
             bool: True if the player is in a game, otherwise False.
         """
-        return self.check_pixels([(65, 465), (16, 390)], [(206, 28, 190), (255, 255, 255)])
+        return self.check_pixels([(62, 425), (16, 390)], [(37, 41, 45), (255, 255, 255)])
 
     def pending_clan_battle(self) -> bool:
         """
