@@ -54,8 +54,8 @@ class Interface:
         subprocess.run("./utilities/init_window.exe")
         self.w: int = w
         self.h: int = h
-        self.xpos: int = x + 9  # Adjusted for window decorations
-        self.ypos: int = y + 38  # Adjusted for window decorations
+        self.xpos: int = x + 8  # Adjusted for window decorations
+        self.ypos: int = y + 31  # Adjusted for window decorations
 
     def screenshot_window(self) -> Tuple[Dict[str, int], bytes]:
         """
@@ -183,7 +183,7 @@ class Interface:
         Returns:
             bool: True if on clan tab, otherwise False.
         """
-        return self.check_pixels([(177, 30), (251, 29)], [(210, 124, 249), (229, 45, 49)])
+        return self.check_pixels([(177, 30), (251, 29)], [(255, 255, 255), (255, 255, 255)])
 
 
     def determine_victor(self) -> float:
@@ -222,7 +222,7 @@ class Interface:
         Returns:
             bool: True if the player is in a game, otherwise False.
         """
-        return self.check_pixels([(188, 335)], [(56, 82, 125)])
+        return self.check_pixels([(191, 358)], [(255, 202, 81)])
 
     def accept_battle_friend(self) -> None:
         """
