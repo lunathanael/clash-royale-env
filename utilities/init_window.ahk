@@ -1,7 +1,7 @@
 if WinExist("Clash Royale")
 {
     WinActivate
-    WinMove 0, 0, 436, 792
+    WinMove 0, 0, 283, 518
 }
 else
 {

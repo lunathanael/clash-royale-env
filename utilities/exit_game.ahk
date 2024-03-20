@@ -1,6 +1,6 @@
 ; exit ongoing game
 
-MouseMove 200, 650
+MouseMove 129, 414
 Click
 
 

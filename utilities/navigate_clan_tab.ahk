@@ -1,4 +1,4 @@
 ; Navigate to clan tab
 
-MouseMove 309, 693
+MouseMove 193, 448
 Click

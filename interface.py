@@ -40,7 +40,7 @@ class Interface:
         ypos (int): Y-coordinate of the top-left corner of the capture area.
     """
 
-    def __init__(self, w: int = 414, h: int = 736, x: int = 0, y: int = 0) -> None:
+    def __init__(self, w: int = 265, h: int = 471, x: int = 0, y: int = 0) -> None:
         """
         Initializes the interface with specified dimensions and position.
 
@@ -54,8 +54,8 @@ class Interface:
         subprocess.run("./utilities/init_window.exe")
         self.w: int = w
         self.h: int = h
-        self.xpos: int = x + 11  # Adjusted for window decorations
-        self.ypos: int = y + 45  # Adjusted for window decorations
+        self.xpos: int = x + 9  # Adjusted for window decorations
+        self.ypos: int = y + 38  # Adjusted for window decorations
 
     def screenshot_window(self) -> Tuple[Dict[str, int], bytes]:
         """
@@ -129,9 +129,9 @@ class Interface:
             block (bool): True value will block the function from completing until the action is made.
         """
         dx, dy = x, 31 - y
-        xcoord = 38 + dx * 20
-        ycoord = 65 + dy * 16
-        cardx, cardy = 130 + 77 * card_index, 650
+        xcoord = 27 + dx * 12.6
+        ycoord = 43 + dy * 10
+        cardx, cardy = 80 + 53 * card_index, 400
         if block:
             subprocess.run(["./utilities/play_card.exe", str(xcoord), str(ycoord), str(cardx), str(cardy)])
         else:
@@ -175,7 +175,7 @@ class Interface:
         Returns:
             bool: True if the game is terminal, otherwise False.
         """
-        return (self.get_pixel_color(98, 722) != (236, 28, 223)) and (self.get_pixel_color(403, 702) != (8, 85, 160)) and (self.get_pixel_color(404, 693) != (8, 88, 164))
+        return not self.in_game()
 
     def on_clan_tab(self) -> bool:
         """
@@ -183,7 +183,7 @@ class Interface:
         Returns:
             bool: True if on clan tab, otherwise False.
         """
-        return self.check_pixels([(30, 49), (373, 43)], [(51, 140, 69), (255, 255, 255)])
+        return self.check_pixels([(90, 400), (236, 33)], [(183, 98, 254), (222, 49, 49)])
 
 
     def determine_victor(self) -> float:
@@ -194,11 +194,11 @@ class Interface:
             float: A numerical representation of the game outcome (0 for opponent win, 0.5 for draw, 1 for player win).
             Error states will return -1.
         """
-        if self.check_pixels([(163, 49), (193,51), (248, 58)], [(255, 255, 255), (255, 255, 255), (255, 255, 255)]):
+        if self.check_pixels([(107, 34), (136, 36), (160, 37)], [(255, 255, 255), (255, 255, 255), (255, 255, 255)]):
             return 0.5
-        if self.check_pixels([(156, 75), (213, 86), (238, 83)], [(255, 204, 255), (255, 204, 255), (255, 204, 255)]):
+        if self.check_pixels([(102, 55), (137, 55), (158, 55)], [(255, 204, 255), (255, 204, 255), (255, 204, 255)]):
             return 0
-        if self.check_pixels([(161, 302), (207, 294), (246, 301)], [(102, 255, 255), (102, 255, 255), (102, 255, 255)]):
+        if self.check_pixels([(102, 191), (127, 194), (154, 193)], [(102, 255, 255), (102, 255, 255), (102, 255, 255)]):
             return 1
 
         #raise RuntimeWarning("No Gameover event detected! Make sure this is intended behavior, otherwise, report this as a bug. Returning -1.")
@@ -213,8 +213,7 @@ class Interface:
         Returns:
             bool: True if the player is in a game, otherwise False.
         """
-        #return self.check_pixels([(42, 614), (35, 609), (45, 634)], [(0,0,0),(255, 255, 255), (0, 0, 0)])
-        return not self.is_terminal()
+        return self.check_pixels([(65, 465), (16, 390)], [(206, 28, 190), (255, 255, 255)])
 
     def pending_clan_battle(self) -> bool:
         """
@@ -223,7 +222,7 @@ class Interface:
         Returns:
             bool: True if the player is in a game, otherwise False.
         """
-        return self.check_pixels([(288, 538)], [(255, 190, 43)])
+        return self.check_pixels([(183, 336)], [(255, 202, 81)])
 
     def accept_battle_friend(self) -> None:
         """
@@ -243,13 +242,6 @@ class Interface:
         Exits a finished game by pressing 'ok'.
         """
         subprocess.run("./utilities/exit_game.exe")
-
-    def start_classic_deck_battle_friend(self) -> None:
-        """
-        Initiates a classic deck battle within the game interface with the top friend.
-        """
-
-        subprocess.run("./utilities/start_classic_deck_friend.exe")
 
     def start_classic_deck_battle_clan(self) -> None:
         """

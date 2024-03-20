@@ -1,10 +1,10 @@
 ; accept battle
 
-MouseMove 276, 76
+MouseMove 170, 54
 Click
 
 sleep 200
 
-MouseMove 310, 230
+MouseMove 171, 153
 Click
 

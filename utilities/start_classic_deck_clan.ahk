@@ -1,15 +1,16 @@
-; classic deck friendly battle against top online friend
+; classic deck friendly battle in clan
 
-MouseMove 170, 620
+MouseMove 112, 398
 Click
 
 sleep 400
 
-SendEvent "{Click 320 620 Down}{click 320 200 Up}"
+SendEvent "{Click 235 400 Down}{click 235 112 Up}"
 
-sleep 100
+sleep 50
 
-MouseMove 320, 420
+MouseMove 194, 279
 Click
+
 
 Exit
