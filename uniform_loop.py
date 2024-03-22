@@ -1,4 +1,4 @@
-from envs import ClassicEnv
+from envs import ClanClassicEnv
 import jax
 import time
 import pickle
@@ -36,7 +36,7 @@ class Buffer():
 def main(_):
     buffer = Buffer()
 
-    env = ClassicEnv(host=FLAGS.host)
+    env = ClanClassicEnv(host=FLAGS.host)
     rng_key = jax.random.PRNGKey(FLAGS.seed)
 
     for i in range(FLAGS.buffer_size):
