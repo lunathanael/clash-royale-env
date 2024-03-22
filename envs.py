@@ -125,18 +125,14 @@ if __name__ == "__main__":
         print(env.get_pixel(coord[0], coord[1]))
 
     import scrcpy
-    card_index=3
-    env._interface.tap(335 + card_index * 200, 2050)
+    card_index=0
     
     for i in range(18):
-        for j in range(32):
-            x = 57.6 * i + 50
-            y = 46.3 * (31-j) + 280
-            env._interface.client.control.touch(x, y, scrcpy.ACTION_DOWN)
-            time.sleep(0.7)
-            
-            env._interface.client.control.touch(335 + card_index * 200, 2050, scrcpy.ACTION_UP)
-            time.sleep(0.1)
+        j = 7
+        x = 57.6 * i + 50
+        y = 46.3 * (31-j) + 280
+        env._interface.client.control.touch(x, y, scrcpy.ACTION_DOWN)
+        input()
 
 
     print("Checks and states")
