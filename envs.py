@@ -46,6 +46,9 @@ class ClanClassicEnv():
         result = self.result()
         self.exit_game()
         return result
+    
+    def play_card(self, x: int, y: int, card_index: int):
+        self._interface.tap(335 + card_index * 200, 2050)
 
     # action wrappers
     def start_classic_clan(self) -> None:
@@ -57,6 +60,9 @@ class ClanClassicEnv():
 
     def accept_battle_clan(self) -> None:
         self._interface.tap(855, 1840)
+
+    def exit_game(self) -> None:
+        self._interface.tap()
 
     # detection helpers
     def get_pixel(self, x, y):
@@ -87,23 +93,26 @@ class ClanClassicEnv():
         Checks for in game via elixir, white chat, and card border
         """
 
-        return env.check_pixels([[80, 2000], [210, 2250], [240, 2300]], [[255, 254, 255], [155, 79, 6], [187, 24, 190]])
+        return env.check_pixels([[80, 2000], [210, 2250], [1054, 2256]], [[255, 253, 255], [155, 79, 6], [155, 82, 9]])
     
     def terminal(self) -> bool:
         """
         Checks for terminal state by looking for chat box without elixir/card border
         """
 
-        return env.check_pixels([[80, 2000]], [[255, 254, 255]]) != self.check_pixels([[210, 2250], [240, 2300]], [[155, 79, 6], [187, 24, 190]])
+        return env.check_pixels([[80, 2000]], [[255, 254, 255]]) != self.check_pixels([[210, 2250], [1054, 2256]], [[155, 79, 6], [155, 82, 9]])
     
     def result(self) -> float:
+        """
+        Determines result through checking for text pixel colors
+        """
         if env.check_pixels([[421, 1045], [643, 1047], [560, 1040]], [[253, 253, 103], [255, 255, 109], [254, 252, 95]]):
             return 1
         
         if env.check_pixels([[418, 475], [622, 482], [520, 482]], [[251, 200, 254], [255, 204, 252], [255, 211, 255]]):
             return 0
         
-        if env.check_pixels([[421, 1045], [643, 1047], [560, 1040]], [[253, 253, 103], [255, 255, 109], [254, 252, 95]]):
+        if env.check_pixels([[430, 390], [540, 400], [643, 400]], [[255, 251, 255], [255, 255, 255], [255, 255, 254]]):
             return 0.5
         
         return -1
@@ -111,11 +120,23 @@ class ClanClassicEnv():
 if __name__ == "__main__":
     # Debugging
     env = ClanClassicEnv(True)
-    ls = [[970, 222], [15, 1080]]
+    ls = [[430, 390], [540, 400], [643, 400]]
     for coord in ls:
         print(env.get_pixel(coord[0], coord[1]))
-    env._interface.tap(421, 1045)
 
+    import scrcpy
+    card_index=3
+    env._interface.tap(335 + card_index * 200, 2050)
+    
+    for i in range(18):
+        for j in range(32):
+            x = 57.6 * i + 50
+            y = 46.3 * (31-j) + 280
+            env._interface.client.control.touch(x, y, scrcpy.ACTION_DOWN)
+            time.sleep(0.7)
+            
+            env._interface.client.control.touch(335 + card_index * 200, 2050, scrcpy.ACTION_UP)
+            time.sleep(0.1)
 
 
     print("Checks and states")
