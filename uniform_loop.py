@@ -74,7 +74,7 @@ def main(_):
 
     del env
 
-    timestr = time.strftime("%m%d-%H%M")/
+    timestr = time.strftime("%m%d-%H%M")
     if FLAGS.host:
         timestr += '_H'
 
