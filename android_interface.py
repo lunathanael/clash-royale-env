@@ -9,14 +9,11 @@ class AndroidInterface():
         self.client = scrcpy.Client(device=serial, stay_awake=True,)
 
     def get_frame(self):
+        self.client.update_frame()
         return self.client.last_frame
-
-    def ready(self) -> bool:
-        return self.get_frame() is not None
 
     def start(self, threaded : bool=True) -> None:
         self.client.start(threaded=threaded)
-        wait_until(self.ready, timeout=20, period=0.1)
 
     def stop(self) -> None:
         self.client.stop()
@@ -61,14 +58,10 @@ if __name__ == "__main__":
     interface = AndroidInterface()
     interface.start(True)
 
-    from PIL import Image
-    im = Image.fromarray(interface.get_frame())
-    im.save("temp.jpeg")
-    import time
-    print(time.strftime("%H:%M:%S", time.localtime()))
-    interface.tap(452, 2054)
-    time.sleep(0.05)
-    interface.swipe(800, 1888, 800, 700, 20)
-    time.sleep(0.05)
-    interface.tap(800, 1200)
+    lf = interface.get_frame()
+    while True:
+        if (lf != interface.get_frame()).any():
+            print("New Frame")
+            lf = interface.get_frame()
+
     interface.stop()

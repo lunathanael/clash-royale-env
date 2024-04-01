@@ -33,6 +33,7 @@ class Buffer():
     def buffer_full(self):
         return len(self.games_results) == FLAGS.buffer_size
 
+
 def main(_):
     buffer = Buffer()
 
@@ -44,7 +45,7 @@ def main(_):
         actions = []
         env.reset()
         print(f"Game {i} began.")
-        while not env.terminal():
+        while env.in_game():
             obs = env.get_observation()
             root = uniform_rootfn(obs)
             rng_key, gmp_key = jax.random.split(rng_key)
@@ -66,12 +67,14 @@ def main(_):
             rgb_frames.append(obs)
         
         print(f"Game {i} over with {len(rgb_frames)} frames.")
-        result = env.result()
+        result = env.await_result()
         print(f"Game {i} result: {result}")
 
         buffer.add_game(rgb_frames, actions, result)
 
-    timestr = time.strftime("%m%d-%H%M")
+    del env
+
+    timestr = time.strftime("%m%d-%H%M")/
     if FLAGS.host:
         timestr += '_H'
 

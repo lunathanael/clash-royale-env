@@ -2,7 +2,7 @@ import time
 import numpy as np
 import math
 
-def wait_until(somepredicate, timeout, period=0.25, *args, **kwargs):
+def wait_until(somepredicate, timeout, period=0.01, *args, **kwargs):
   mustend = time.time() + timeout
   while time.time() < mustend:
     if somepredicate(*args, **kwargs): return True
