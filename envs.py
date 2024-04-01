@@ -4,10 +4,10 @@ import numpy as np
 import time
 
 class ClanClassicEnv():
-    def __init__(self, host: bool):
+    def __init__(self, serial: str, host: bool):
         self._num_actions = 18 * 32 * 4 + 1
         self._is_host = host
-        self._interface = AndroidInterface()
+        self._interface = AndroidInterface(serial=serial)
         self._interface.start(threaded=False)
 
     

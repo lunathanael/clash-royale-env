@@ -4,7 +4,7 @@ from utilities import wait_until
 
 class AndroidInterface():
 
-    def __init__(self, serial: str="RFCWC04A2VY"):
+    def __init__(self, serial: str):
         self.serial = serial
         self.client = scrcpy.Client(device=serial, stay_awake=True,)
 

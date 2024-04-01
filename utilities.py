@@ -23,12 +23,12 @@ def wait_until_nvalue(someeval, nvalue, timeout, period=0.25, *args, **kwargs):
     time.sleep(period)
   return False
 
-def redmean(bgr1, bgr2):
+def redmean(bgr1, bgr2) -> float:
   rm = (bgr1[2] + bgr2[2]) // 2
   delta = (bgr1 - bgr2) ** 2
   return math.sqrt((2 + rm/256) * delta[2] + 4 * delta[1] + (2 + (255-rm) / 256) * delta[0])
 
 def vredmean(bgr1, bgr2):
-    rm = (bgr1[:, 2] + bgr2[:, 2]) // 2.0
-    delta = (bgr1 - bgr2) ** 2
-    return np.sqrt((2 + rm/256) * delta[:, 2] + 4 * delta[:, 1] + (2 + (255-rm) / 256) * delta[:, 0])
+  rm = (bgr1[:, 2] + bgr2[:, 2]) // 2.0
+  delta = (bgr1 - bgr2) ** 2
+  return np.sqrt((2 + rm/256) * delta[:, 2] + 4 * delta[:, 1] + (2 + (255-rm) / 256) * delta[:, 0])
