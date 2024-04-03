@@ -24,8 +24,8 @@ class MuZeroConfig():
     #scheduling
     def temperature_fn(max_training_steps, training_steps):
         if training_steps < 0.5 * max_training_steps:
-            return 1.0
+            return 5.0
         elif training_steps < 0.75 * max_training_steps:
-            return 0.5
+            return 2.5
         else:
-            return 0.25
+            return 1.25
