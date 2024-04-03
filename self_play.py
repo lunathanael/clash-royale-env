@@ -70,7 +70,7 @@ def main(_):
             trajectory = muax.Trajectory()
             temperature = config.temperature_fn(max_training_steps=config.max_training_steps, training_steps=training_step)
             env.reset()
-            while env.in_game():
+            while True:
                 obs = env.get_observation()
                 obs = cv2.resize(obs, dsize=(135, 240), interpolation=cv2.INTER_CUBIC)
                 rng_key, subkey = jax.random.split(rng_key)
@@ -82,13 +82,16 @@ def main(_):
                     temperature=temperature)
                 env.apply(a)
 
+                if not env.in_game():
+                    break
+
                 tracer.add(obs, a, 0, False, v=v, pi=pi)
                 while tracer:
                     trans = tracer.pop()
                     trajectory.add(trans)
 
             result = env.await_result()
-            tracer.add(obs, 2304, result, True, v=v, pi=pi)
+            tracer.add(obs, a, result, True, v=v, pi=pi)
             while tracer:
                 trans = tracer.pop()
                 trajectory.add(trans)
@@ -113,13 +116,16 @@ def main(_):
                 temperature=temperature)
             env.apply(a)
 
+            if not env.in_game():
+                break
+
             tracer.add(obs, a, 0, False, v=v, pi=pi)
             while tracer:
                 trans = tracer.pop()
                 trajectory.add(trans)
 
         result = env.await_result()
-        tracer.add(obs, 2304, result, True, v=v, pi=pi)
+        tracer.add(obs, a, result, True, v=v, pi=pi)
         while tracer:
             trans = tracer.pop()
             trajectory.add(trans)

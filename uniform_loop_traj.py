@@ -17,14 +17,14 @@ import muax
 FLAGS = flags.FLAGS
 flags.DEFINE_bool("host", None, "If the user is the host.")
 flags.DEFINE_string("serial", "RFCWC04A2VY", "Serial ID of the Android Device")
-flags.DEFINE_integer("buffer_size", 10, "Size of the buffer.")
-
-flags.DEFINE_integer("num_simulations", 16, "Number of simulations.")
-flags.DEFINE_integer("max_num_considered_actions", 16,
-                     "The maximum number of actions expanded at the root.")
-flags.DEFINE_integer("max_depth", None, "The maximum search depth.")
+flags.DEFINE_integer("buffer_size", 100, "Size of the buffer.")
+flags.DEFINE_integer("buffer_warmup", 32, "Size for buffer warmup.")
 
 flags.DEFINE_integer("seed", 42, "Random seed.")
+
+flags.DEFINE_string("model_path", None, "Path of network weights.")
+flags.DEFINE_string("buffer_path", None, "Path of buffer binary.")
+flags.DEFINE_string("model_name", "default_model", "Name of model.")
 
 discount = 0.997
 
