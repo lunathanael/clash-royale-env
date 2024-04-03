@@ -28,9 +28,7 @@ class ClanClassicEnv():
         else:
             wait_until(self.pending_clan_battle, timeout=1800, period=0.05)
             self.accept_battle_clan()
-        print("Waiting")
         wait_until(self.in_game, timeout=1800, period=0.05)
-        print("In game")
 
     def get_observation(self):
         return self._interface.get_frame()
@@ -43,8 +41,7 @@ class ClanClassicEnv():
         Waits for a game over result.
         Once a result is determined, the game is exited and result returned.
         """
-        wait_until_nvalue(self.result, nvalue=-1, timeout=100, period=0.05)
-        result = self.result()
+        result = wait_until_nvalue(self.result, nvalue=-1, timeout=100, period=0.05)
         self.exit_game()
         return result
     
@@ -72,11 +69,11 @@ class ClanClassicEnv():
     def get_pixel(self, x, y):
         return self._interface.get_frame()[y, x]
     
-    def check_pixels(self, coordinates, target_colors, tolerance=30) -> bool:
+    def check_pixels(self, coordinates, target_colors, tolerance=40) -> bool:
         coordinates = np.array(coordinates)
         x, y, target_colors = coordinates[:, 0], coordinates[:, 1], np.array(target_colors)
         colors = self.get_pixel(x, y)
-        return np.all(vredmean(colors, target_colors) < tolerance)
+        return np.mean(vredmean(colors, target_colors)) <= tolerance
     
     def pending_clan_battle(self) -> bool:
         """

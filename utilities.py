@@ -19,7 +19,8 @@ def wait_until_value(someeval, value, timeout, period=0.25, *args, **kwargs):
 def wait_until_nvalue(someeval, nvalue, timeout, period=0.25, *args, **kwargs):
   mustend = time.time() + timeout
   while time.time() < mustend:
-    if someeval(*args, **kwargs) != nvalue: return True
+    val = someeval(*args, **kwargs)
+    if val != nvalue: return val
     time.sleep(period)
   return False
 
