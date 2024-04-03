@@ -4,7 +4,7 @@ class MuZeroConfig():
     num_actions = 2305
     support_size = 2305
     full_support_size = 4611
-    num_simulations = 5
+    num_simulations = 10
     output_init_scale = 1.0
 
     num_trajectory = 32
