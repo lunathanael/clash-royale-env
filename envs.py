@@ -26,9 +26,9 @@ class ClanClassicEnv():
         if self._is_host:
             self.start_classic_clan()
         else:
-            wait_until(self.pending_clan_battle, timeout=1800, period=0.05)
+            wait_until(self.pending_clan_battle, timeout=-1, period=0.05)
             self.accept_battle_clan()
-        wait_until(self.in_game, timeout=1800, period=0.05)
+        wait_until(self.in_game, timeout=-1, period=0.05)
 
     def get_observation(self):
         return self._interface.get_frame()

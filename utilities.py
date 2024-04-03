@@ -4,21 +4,21 @@ import math
 
 def wait_until(somepredicate, timeout, period=0.01, *args, **kwargs):
   mustend = time.time() + timeout
-  while time.time() < mustend:
+  while timeout == -1 or time.time() < mustend:
     if somepredicate(*args, **kwargs): return True
     time.sleep(period)
   return False
 
 def wait_until_value(someeval, value, timeout, period=0.25, *args, **kwargs):
   mustend = time.time() + timeout
-  while time.time() < mustend:
+  while timeout == -1 or time.time() < mustend:
     if someeval(*args, **kwargs) == value: return True
     time.sleep(period)
   return False
 
 def wait_until_nvalue(someeval, nvalue, timeout, period=0.25, *args, **kwargs):
   mustend = time.time() + timeout
-  while time.time() < mustend:
+  while timeout == -1 or time.time() < mustend:
     val = someeval(*args, **kwargs)
     if val != nvalue: return val
     time.sleep(period)

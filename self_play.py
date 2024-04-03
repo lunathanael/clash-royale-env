@@ -40,7 +40,7 @@ def main(_):
     repr_fn = nn._init_ez_representation_func(nn.EZRepresentation, config.embedding_size)
     pred_fn = nn._init_ez_prediction_func(nn.EZPrediction, config.num_actions, config.full_support_size, config.output_init_scale)
     dy_fn = nn._init_ez_dynamic_func(nn.EZDynamic, config.embedding_size, config.num_actions, config.full_support_size, config.output_init_scale)
-    model = muax.StochasticMuZero(repr_fn, pred_fn, dy_fn, policy='gumbel', discount=config.discount,
+    model = muax.MuZero(repr_fn, pred_fn, dy_fn, policy='gumbel', discount=config.discount,
                         optimizer=gradient_transform, support_size=config.support_size)
 
     if FLAGS.model_path is None:
@@ -49,6 +49,7 @@ def main(_):
         model.init(subkey, sample_input)
     else:
         model.load(FLAGS.model_path)
+
 
     if FLAGS.buffer_path is None:
         buffer = muax.TrajectoryReplayBuffer(FLAGS.buffer_size)
@@ -104,7 +105,7 @@ def main(_):
         trajectory = muax.Trajectory()
         temperature = config.temperature_fn(max_training_steps=config.max_training_steps, training_steps=training_step)
         env.reset()
-        while env.in_game():
+        while True:
             obs = env.get_observation()
             obs = cv2.resize(obs, dsize=(135, 240), interpolation=cv2.INTER_CUBIC)
             rng_key, subkey = jax.random.split(rng_key)
@@ -133,26 +134,33 @@ def main(_):
         if len(trajectory) >= config.k_steps:
             buffer.add(trajectory, trajectory.batched_transitions.w.mean())
 
+
+        with open(f'buffers/game_buffer_backup.pkl', 'wb') as file_handle:
+            pickle.dump(buffer, file_handle)
+
         #Training
-        if max_training_steps_reached:
-            break
-        train_loss = 0
-        for _ in range(50):
-            transition_batch = buffer.sample(num_trajectory=config.num_trajectory,
-                                            sample_per_trajectory=config.sample_per_trajectory,
-                                            k_steps=config.k_steps)
-            loss_metric = model.update(transition_batch)
-            train_loss += loss_metric['loss']
-            training_step += 1
-            if training_step >= config.max_training_steps:
-                max_training_steps_reached = True
+        if ep % 5 == 0:
+            if max_training_steps_reached:
                 break
-        train_loss /= 50
-        print(f'epoch: {ep:04d}, loss: {train_loss:.8f}, training_step: {training_step}')
-        model.save(f'networks/{FLAGS.model_name}_epoch{ep}_step{training_step}')
+            train_loss = 0
+            for i in range(50):
+                transition_batch = buffer.sample(num_trajectory=config.num_trajectory,
+                                                sample_per_trajectory=config.sample_per_trajectory,
+                                                k_steps=config.k_steps)
+                loss_metric = model.update(transition_batch)
+                train_loss += loss_metric['loss']
+                training_step += 1
+                if training_step >= config.max_training_steps:
+                    max_training_steps_reached = True
+                    break
+                print(f'epoch: {ep:04d}, loss: {(train_loss/(i+1)):.8f}, training_step: {training_step}', end='\r')
+            train_loss /= 50
+            print(f'epoch: {ep:04d}, loss: {train_loss:.8f}, training_step: {training_step}')
+            model.save(f'networks/{FLAGS.model_name}_epoch{ep}_step{training_step}')
+
 
 
     del env # disconnect adb
 
 if __name__ == "__main__":
-  app.run(main)
+    app.run(main)
