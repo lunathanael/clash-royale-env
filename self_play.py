@@ -100,6 +100,9 @@ def main(_):
             if len(trajectory) >= config.k_steps:
                 buffer.add(trajectory, trajectory.batched_transitions.w.mean())
 
+            with open(f'buffers/game_buffer_backup.pkl', 'wb') as file_handle:
+                pickle.dump(buffer, file_handle)
+
     print("Starting Training")
     for ep in range(config.max_episodes):
         trajectory = muax.Trajectory()
