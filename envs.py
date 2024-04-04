@@ -54,9 +54,9 @@ class ClanClassicEnv():
     # action wrappers
     def start_classic_clan(self) -> None:
         self._interface.tap(452, 2054)
-        time.sleep(0.3)
-        self._interface.swipe(800, 1888, 800, 1600, move_step_length=20)
         time.sleep(0.5)
+        self._interface.swipe(800, 1888, 800, 1600, move_step_length=20)
+        time.sleep(1)
         self._interface.tap(800, 1888)
 
     def accept_battle_clan(self) -> None:
