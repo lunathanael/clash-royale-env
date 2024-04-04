@@ -23,7 +23,7 @@ flags.DEFINE_string("serial", "RFCWC04A2VY", "Serial ID of the Android Device")
 flags.DEFINE_integer("buffer_size", 100, "Size of the buffer.")
 flags.DEFINE_integer("buffer_warmup", 32, "Size for buffer warmup.")
 
-flags.DEFINE_integer("seed", 42, "Random seed.")
+flags.DEFINE_integer("seed", 429, "Random seed.")
 
 flags.DEFINE_string("model_path", None, "Path of network weights.")
 flags.DEFINE_string("buffer_path", None, "Path of buffer binary.")
