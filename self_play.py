@@ -44,7 +44,7 @@ def main(_):
                         optimizer=gradient_transform, support_size=config.support_size)
 
     if FLAGS.model_path is None:
-        sample_input = jnp.expand_dims(jnp.zeros((240, 135, 3)), axis=0)
+        sample_input = jnp.expand_dims(jnp.zeros((512, 288, 3)), axis=0)
         rng_key, subkey = jax.random.split(rng_key)
         model.init(subkey, sample_input)
     else:
@@ -73,7 +73,7 @@ def main(_):
             env.reset()
             while True:
                 obs = env.get_observation()
-                obs = cv2.resize(obs, dsize=(135, 240), interpolation=cv2.INTER_CUBIC)
+                obs = cv2.resize(obs, dsize=(288, 512), interpolation=cv2.INTER_NEAREST)
                 rng_key, subkey = jax.random.split(rng_key)
                 a, pi, v = model.act(subkey, obs, 
                     with_pi=True, 
@@ -107,7 +107,7 @@ def main(_):
         env.reset()
         while True:
             obs = env.get_observation()
-            obs = cv2.resize(obs, dsize=(135, 240), interpolation=cv2.INTER_CUBIC)
+            obs = cv2.resize(obs, dsize=(288, 512), interpolation=cv2.INTER_NEAREST)
             rng_key, subkey = jax.random.split(rng_key)
             a, pi, v = model.act(subkey, obs, 
                 with_pi=True, 
@@ -139,7 +139,8 @@ def main(_):
             pickle.dump(buffer, file_handle)
 
         #Training
-        if ep % 5 == 0:
+        if ep % 10 == 9:
+            print("Updating Network...")
             if max_training_steps_reached:
                 break
             train_loss = 0
@@ -156,7 +157,8 @@ def main(_):
                 print(f'epoch: {ep:04d}, loss: {(train_loss/(i+1)):.8f}, training_step: {training_step}', end='\r')
             train_loss /= 50
             print(f'epoch: {ep:04d}, loss: {train_loss:.8f}, training_step: {training_step}')
-            model.save(f'networks/{FLAGS.model_name}_epoch{ep}_step{training_step}')
+            timestr = time.strftime("%m%d-%H%M")
+            model.save(f'networks/{FLAGS.model_name}_epoch{ep}_step{training_step}_t{timestr}')
 
 
 

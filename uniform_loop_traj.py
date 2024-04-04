@@ -40,7 +40,7 @@ def main(_):
         trajectory = muax.Trajectory()
         env.reset()
         obs = env.get_observation()
-        obs = cv2.resize(obs, dsize=(135, 240), interpolation=cv2.INTER_CUBIC)
+        obs = cv2.resize(obs, dsize=(135, 240), interpolation=cv2.INTER_LINEAR)
         print(f"Game {i} began.")
         while True:
             rng_key, gmp_key = jax.random.split(rng_key)

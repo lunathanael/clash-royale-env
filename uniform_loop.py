@@ -42,6 +42,15 @@ def main(_):
     buffer = Buffer()
 
     env = ClanClassicEnv(serial=FLAGS.serial, host=FLAGS.host)
+    import cv2
+    obss = env.get_observation()
+    obs1 = cv2.resize(obss, dsize=(288, 512), interpolation=cv2.INTER_NEAREST)
+    obs2 = cv2.resize(obss, dsize=(288, 512), interpolation=cv2.INTER_CUBIC)
+    cv2.imwrite('temp2.jpg', obs1)
+    
+    cv2.imwrite('temp3.jpg', obs2)
+    cv2.waitKey(10000)
+
     rng_key = jax.random.PRNGKey(FLAGS.seed)
 
     for i in range(FLAGS.buffer_size):
