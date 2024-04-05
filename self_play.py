@@ -29,6 +29,9 @@ flags.DEFINE_string("model_path", None, "Path of network weights.")
 flags.DEFINE_string("buffer_path", None, "Path of buffer binary.")
 flags.DEFINE_string("model_name", "default_model", "Name of model.")
 
+flags.DEFINE_integer("epoch", 0, "epoch")
+flags.DEFINE_integer("training_step", 0, "training_step")
+
 
 
 def main(_):
@@ -61,7 +64,7 @@ def main(_):
 
 
     tracer = muax.PNStep(10, config.discount, 0.5) 
-    training_step = 0
+    training_step = FLAGS.training_step
     max_training_steps_reached = False
     env = ClanClassicEnv(serial=FLAGS.serial, host=FLAGS.host)
 
@@ -101,7 +104,7 @@ def main(_):
                 buffer.add(trajectory, trajectory.batched_transitions.w.mean())
 
     print("Starting Training")
-    for ep in range(config.max_episodes):
+    for ep in range(FLAGS.epoch, config.max_episodes):
         trajectory = muax.Trajectory()
         temperature = config.temperature_fn(max_training_steps=config.max_training_steps, training_steps=training_step)
         env.reset()
@@ -115,6 +118,7 @@ def main(_):
                 obs_from_batch=False,
                 num_simulations=config.num_simulations,
                 temperature=temperature)
+            print(f"Pred v: {v}", end='\r')
             env.apply(a)
 
             if not env.in_game():

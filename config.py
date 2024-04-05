@@ -1,6 +1,6 @@
 class MuZeroConfig():
     discount = 0.997
-    embedding_size = 512
+    embedding_size = 128
     num_actions = 2305
     support_size = 2305
     full_support_size = 4611
@@ -24,8 +24,8 @@ class MuZeroConfig():
     #scheduling
     def temperature_fn(max_training_steps, training_steps):
         if training_steps < 0.5 * max_training_steps:
-            return 5.0
+            return 1.0
         elif training_steps < 0.75 * max_training_steps:
-            return 2.5
+            return 0.5
         else:
-            return 1.25
+            return 0.25
