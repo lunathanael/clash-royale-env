@@ -1,5 +1,5 @@
 class MuZeroConfig():
-    discount = 1.0
+    discount = 0.997
     embedding_size = 32
     num_actions = 2305
     support_size = 2305
@@ -21,8 +21,10 @@ class MuZeroConfig():
     warmup_steps=5_000
     transition_steps=50_000
 
-    height = 512
-    width = 288
+    #height = 512
+    #width = 288
+    height=384
+    width=216
 
     #scheduling
     def temperature_fn(max_training_steps, training_steps):

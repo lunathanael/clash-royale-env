@@ -74,9 +74,11 @@ def main(_):
             trajectory = muax.Trajectory()
             temperature = config.temperature_fn(max_training_steps=config.max_training_steps, training_steps=training_step)
             env.reset()
+            t_count = 0
             while True:
                 obs = env.get_observation()
                 obs = cv2.resize(obs, dsize=(config.width, config.height), interpolation=cv2.INTER_NEAREST)
+
                 rng_key, subkey = jax.random.split(rng_key)
                 # a, pi, v = model.act(subkey, obs, 
                 #     with_pi=True, 
@@ -87,8 +89,9 @@ def main(_):
                 random_action = jax.random.randint(subkey, shape=(1,), minval=0, maxval=2305)[0]
                 rng_key, subkey = jax.random.split(rng_key)
                 random_prob = jax.random.uniform(rng_key, shape=(1,))[0]
-                no_action_prob = 0.8
-                a = random_action if random_prob < no_action_prob else 2304
+                no_action_prob = 0.5
+                t_count += 1
+                a = random_action if (t_count % 8 != 7 or random_prob < no_action_prob) else 2304
                 v = 0
                 probability_of_other_values = (1 - no_action_prob) / 2304
 
@@ -100,14 +103,14 @@ def main(_):
                 if not env.in_game():
                     break
 
-                tracer.add(obs, a, 0, False, v=v, pi=pi)
+                tracer.add(obs, a, 0.1, False, v=v, pi=pi)
                 while tracer:
                     trans = tracer.pop()
                     trajectory.add(trans)
                 time.sleep(float(random_prob) * 2)
 
             result = env.await_result()
-            tracer.add(obs, a, result, True, v=v, pi=pi)
+            tracer.add(obs, a, result*1000, True, v=v, pi=pi)
             while tracer:
                 trans = tracer.pop()
                 trajectory.add(trans)
@@ -136,13 +139,13 @@ def main(_):
             if not env.in_game():
                 break
 
-            tracer.add(obs, a, 0, False, v=v, pi=pi)
+            tracer.add(obs, a, 0.1, False, v=v, pi=pi)
             while tracer:
                 trans = tracer.pop()
                 trajectory.add(trans)
 
         result = env.await_result()
-        tracer.add(obs, a, result, True, v=v, pi=pi)
+        tracer.add(obs, a, result*1000, True, v=v, pi=pi)
         while tracer:
             trans = tracer.pop()
             trajectory.add(trans)
@@ -151,7 +154,7 @@ def main(_):
             buffer.add(trajectory, trajectory.batched_transitions.w.mean())
 
 
-        with open(f'buffers/game_buffer_backup.pkl', 'wb') as file_handle:
+        with open(f'buffers/game_buffer_backup_{ep % 2}.pkl', 'wb') as file_handle:
             pickle.dump(buffer, file_handle)
 
         #Training
