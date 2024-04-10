@@ -87,7 +87,7 @@ def main(_):
                 random_action = jax.random.randint(subkey, shape=(1,), minval=0, maxval=2305)[0]
                 rng_key, subkey = jax.random.split(rng_key)
                 random_prob = jax.random.uniform(rng_key, shape=(1,))[0]
-                no_action_prob = 0.95
+                no_action_prob = 0.99
                 a = random_action if random_prob < no_action_prob else 2304
                 v = 0
                 probability_of_other_values = (1 - no_action_prob) / 2304
