@@ -7,7 +7,7 @@ from mctx import gumbel_muzero_policy
 from absl import app
 from absl import flags
 
-from envs import ClanClassicEnv
+from envs import ClanClassicEnv, TrainerEnv
 from network import uniform_recurrentfn, uniform_rootfn
 import jax.numpy as jnp
 
@@ -47,7 +47,7 @@ def main(_):
                         optimizer=gradient_transform, support_size=config.support_size)
 
     if FLAGS.model_path is None:
-        sample_input = jnp.expand_dims(jnp.zeros((512, 288, 3)), axis=0)
+        sample_input = jnp.expand_dims(jnp.zeros((config.height, config.width, 3)), axis=0)
         rng_key, subkey = jax.random.split(rng_key)
         model.init(subkey, sample_input)
     else:
@@ -66,7 +66,7 @@ def main(_):
     tracer = muax.PNStep(10, config.discount, 0.5) 
     training_step = FLAGS.training_step
     max_training_steps_reached = False
-    env = ClanClassicEnv(serial=FLAGS.serial, host=FLAGS.host)
+    env = TrainerEnv(serial=FLAGS.serial)
 
     if warmup:
         print("buffer warm up stage...")
@@ -76,7 +76,7 @@ def main(_):
             env.reset()
             while True:
                 obs = env.get_observation()
-                obs = cv2.resize(obs, dsize=(288, 512), interpolation=cv2.INTER_NEAREST)
+                obs = cv2.resize(obs, dsize=(config.width, config.height), interpolation=cv2.INTER_NEAREST)
                 rng_key, subkey = jax.random.split(rng_key)
                 a, pi, v = model.act(subkey, obs, 
                     with_pi=True, 
@@ -143,26 +143,25 @@ def main(_):
             pickle.dump(buffer, file_handle)
 
         #Training
-        if ep % 10 == 9:
-            print("Updating Network...")
-            if max_training_steps_reached:
+        print("Updating Network...")
+        if max_training_steps_reached:
+            break
+        train_loss = 0
+        for i in range(20):
+            transition_batch = buffer.sample(num_trajectory=config.num_trajectory,
+                                            sample_per_trajectory=config.sample_per_trajectory,
+                                            k_steps=config.k_steps)
+            loss_metric = model.update(transition_batch)
+            train_loss += loss_metric['loss']
+            training_step += 1
+            if training_step >= config.max_training_steps:
+                max_training_steps_reached = True
                 break
-            train_loss = 0
-            for i in range(50):
-                transition_batch = buffer.sample(num_trajectory=config.num_trajectory,
-                                                sample_per_trajectory=config.sample_per_trajectory,
-                                                k_steps=config.k_steps)
-                loss_metric = model.update(transition_batch)
-                train_loss += loss_metric['loss']
-                training_step += 1
-                if training_step >= config.max_training_steps:
-                    max_training_steps_reached = True
-                    break
-                print(f'epoch: {ep:04d}, loss: {(train_loss/(i+1)):.8f}, training_step: {training_step}', end='\r')
-            train_loss /= 50
-            print(f'epoch: {ep:04d}, loss: {train_loss:.8f}, training_step: {training_step}')
-            timestr = time.strftime("%m%d-%H%M")
-            model.save(f'networks/{FLAGS.model_name}_epoch{ep}_step{training_step}_t{timestr}')
+            print(f'epoch: {ep:04d}, loss: {(train_loss/(i+1)):.8f}, training_step: {training_step}', end='\r')
+        train_loss /= 20
+        print(f'epoch: {ep:04d}, loss: {train_loss:.8f}, training_step: {training_step}')
+        timestr = time.strftime("%m%d-%H%M")
+        model.save(f'networks/{FLAGS.model_name}_epoch{ep}_step{training_step}_t{timestr}')
 
 
 
