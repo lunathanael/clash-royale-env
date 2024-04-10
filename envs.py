@@ -240,9 +240,9 @@ if __name__ == "__main__":
     #      .print_stats()
     #  )
 
-    # ls = [[106, 2053], [246, 2309], [1041, 2256]]
-    # for coord in ls:
-    #     print(env.get_pixel(coord[0], coord[1]))
+    ls = [[533, 2222], [995, 292], [551, 2281]]
+    for coord in ls:
+        print(env.get_pixel(coord[0], coord[1]))
 
     #env.start_classic_clan()
     # while True:

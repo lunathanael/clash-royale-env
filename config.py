@@ -1,5 +1,5 @@
 class MuZeroConfig():
-    discount = 0.997
+    discount = 1.0
     embedding_size = 32
     num_actions = 2305
     support_size = 2305
