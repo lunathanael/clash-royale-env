@@ -78,12 +78,23 @@ def main(_):
                 obs = env.get_observation()
                 obs = cv2.resize(obs, dsize=(config.width, config.height), interpolation=cv2.INTER_NEAREST)
                 rng_key, subkey = jax.random.split(rng_key)
-                a, pi, v = model.act(subkey, obs, 
-                    with_pi=True, 
-                    with_value=True, 
-                    obs_from_batch=False,
-                    num_simulations=config.num_simulations,
-                    temperature=temperature)
+                # a, pi, v = model.act(subkey, obs, 
+                #     with_pi=True, 
+                #     with_value=True, 
+                #     obs_from_batch=False,
+                #     num_simulations=config.num_simulations,
+                #     temperature=temperature)
+                random_action = jax.random.randint(subkey, shape=(1,), minval=0, maxval=2305)[0]
+                rng_key, subkey = jax.random.split(rng_key)
+                random_prob = jax.random.uniform(rng_key, shape=(1,))[0]
+                no_action_prob = 0.95
+                a = random_action if random_prob < no_action_prob else 2304
+                v = 0
+                probability_of_other_values = (1 - no_action_prob) / 2304
+
+                # Create the logits array
+                pi = jnp.array([[probability_of_other_values] * 2304 + [no_action_prob]])
+
                 env.apply(a)
 
                 if not env.in_game():
@@ -118,7 +129,7 @@ def main(_):
                 obs_from_batch=False,
                 num_simulations=config.num_simulations,
                 temperature=temperature)
-            print(f"Pred v: {v}", end='\r')
+            print(f"Pred v: {v}, {pi}", end='\r')
             env.apply(a)
 
             if not env.in_game():

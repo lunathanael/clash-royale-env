@@ -7,8 +7,8 @@ class MuZeroConfig():
     num_simulations = 10
     output_init_scale = 1.0
 
-    num_trajectory = 16
-    sample_per_trajectory = 1
+    num_trajectory = 8
+    sample_per_trajectory = 4
     k_steps = 10
 
     max_training_steps = 100000
